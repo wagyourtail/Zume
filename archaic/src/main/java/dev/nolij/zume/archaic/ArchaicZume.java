@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodType;
+import java.util.function.Function;
 
 import static dev.nolij.zume.impl.ZumeConstants.*;
 
@@ -85,7 +86,7 @@ public class ArchaicZume implements IZumeImplementation {
 			entityRenderer.setSmoothCamPartialTicks(0F);
 		}
 	}
-	
+
 	private static final MethodHandle SET_CANCELED = MethodHandleHelper.PUBLIC.getMethodOrNull(
 		Event.class, 
 		"setCanceled", 

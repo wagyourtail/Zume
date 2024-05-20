@@ -6,11 +6,15 @@ import dev.nolij.zume.api.platform.v1.ZumeAPI;
 import dev.nolij.zume.api.config.v1.ZumeConfigAPI;
 import dev.nolij.zume.mixin.primitive.GameRendererAccessor;
 import dev.nolij.zume.mixin.primitive.MinecraftAccessor;
+import dev.nolij.zume.primitive.integration.PrimitiveZumeConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.SmoothUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Function;
 
 public class PrimitiveZume implements ClientModInitializer, IZumeImplementation {
 	
@@ -55,5 +59,10 @@ public class PrimitiveZume implements ClientModInitializer, IZumeImplementation 
 			gameRenderer.setCinematicPitchSmoother(new SmoothUtil());
 		}
 	}
-	
+
+	@Override
+	public Function<Object, Object> constructConfigScreen() {
+		return (parent) -> new PrimitiveZumeConfigScreen((Screen) parent);
+	}
+
 }

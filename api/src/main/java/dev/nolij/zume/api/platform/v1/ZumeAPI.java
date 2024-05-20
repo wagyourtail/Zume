@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 
 @ApiStatus.NonExtendable
 public final class ZumeAPI {
@@ -56,6 +57,11 @@ public final class ZumeAPI {
 			@Override
 			public void onZoomActivate() {
 				implementation.onZoomActivate();
+			}
+
+			@Override
+			public Function<Object, Object> constructConfigScreen() {
+				return implementation.constructConfigScreen();
 			}
 		}, instanceConfigPath);
 	}

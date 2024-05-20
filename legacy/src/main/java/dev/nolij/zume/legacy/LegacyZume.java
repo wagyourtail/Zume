@@ -4,13 +4,17 @@ import dev.nolij.zume.api.platform.v1.CameraPerspective;
 import dev.nolij.zume.api.platform.v1.IZumeImplementation;
 import dev.nolij.zume.api.platform.v1.ZumeAPI;
 import dev.nolij.zume.api.config.v1.ZumeConfigAPI;
+import dev.nolij.zume.legacy.integration.LegacyZumeConfigScreen;
 import dev.nolij.zume.mixin.legacy.GameRendererAccessor;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.SmoothUtil;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Function;
 
 public class LegacyZume implements ClientModInitializer, IZumeImplementation {
 	
@@ -71,5 +75,9 @@ public class LegacyZume implements ClientModInitializer, IZumeImplementation {
 			gameRenderer.setLastTickDelta(0F);
 		}
 	}
-	
+
+	@Override
+	public Function<Object, Object> constructConfigScreen() {
+		return (parent) -> new LegacyZumeConfigScreen((Screen) parent);
+	}
 }

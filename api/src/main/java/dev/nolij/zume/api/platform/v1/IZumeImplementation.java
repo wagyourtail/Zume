@@ -5,6 +5,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonBlocking;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Function;
+
 @ApiStatus.OverrideOnly
 public interface IZumeImplementation {
 	
@@ -15,5 +17,9 @@ public interface IZumeImplementation {
 	@Contract(pure = true) @NotNull CameraPerspective getCameraPerspective();
 	
 	@NonBlocking default void onZoomActivate() {}
-	
+
+	default Function<Object, Object> constructConfigScreen() {
+		return null;
+	}
+
 }

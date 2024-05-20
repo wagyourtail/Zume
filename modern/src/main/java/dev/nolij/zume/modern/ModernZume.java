@@ -6,19 +6,23 @@ import dev.nolij.zume.api.platform.v1.ZumeAPI;
 import dev.nolij.zume.api.config.v1.ZumeConfigAPI;
 import dev.nolij.zume.api.util.v1.MethodHandleHelper;
 import dev.nolij.zume.integration.embeddium.ZumeEmbeddiumConfigScreen;
+import dev.nolij.zume.modern.integration.ModernZumeConfigScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Options;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodType;
+import java.util.function.Function;
 
 public class ModernZume implements ClientModInitializer, IZumeImplementation {
-	
+
 	@Override
 	public void onInitializeClient() {
 		if (FabricLoader.getInstance().getEnvironmentType() != EnvType.CLIENT)
@@ -76,5 +80,28 @@ public class ModernZume implements ClientModInitializer, IZumeImplementation {
 		
 		return CameraPerspective.values()[ordinal];
 	}
-	
+
+	@Override
+	public Function<Object, Object> constructConfigScreen() {
+		Class<?> literalComponent = MethodHandleHelper.PUBLIC.getClassOrNull("net.minecraft.class_2585");
+		if (literalComponent == null || !Component.class.isAssignableFrom(literalComponent)) {
+			return (parent) -> new ModernZumeConfigScreen(Component.literal(""), (Screen) parent);
+		} else {
+			MethodHandle literalTextInit = MethodHandleHelper.PUBLIC.getConstructorOrNull(
+				literalComponent,
+				MethodType.methodType(Component.class, String.class),
+				String.class
+			);
+			return (parent) -> {
+				try {
+					//noinspection DataFlowIssue
+					return new ModernZumeConfigScreen((Component) literalTextInit.invokeExact(""), (Screen) parent);
+				} catch (Throwable e) {
+					ZumeAPI.getLogger().error("Error opening config screen: ", e);
+					return null;
+				}
+			};
+		}
+	}
+
 }
